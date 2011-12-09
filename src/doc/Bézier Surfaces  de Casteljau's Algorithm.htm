@@ -1,0 +1,134 @@
+
+<!-- saved from url=(0082)http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/surface/bezier-de-casteljau.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title> Bézier Surfaces: de Casteljau's Algorithm </title>
+</head><body background="./Bézier Surfaces  de Casteljau's Algorithm_files/background.gif" text="#0A0AFF" link="#22806A" vlink="#FF1CAC" alink="#666666">
+
+<h1> Bézier Surfaces: de Casteljau's Algorithm </h1>
+
+<img src="./Bézier Surfaces  de Casteljau's Algorithm_files/GrLine.gif">
+<p>
+De Casteljau's algorithm can be extended to handle Bézier surfaces.
+More precisely, de Casteljau's algorithm can be applied several times to
+find the corresponding point on a Bézier surface
+<b>p</b>(<i>u</i>,<i>v</i>) given (<i>u</i>,<i>v</i>).  This page describes
+such as extension, which is based on the concept of isoparametric curves
+discussed in the previous page.
+</p><p>
+Recall that the equation of a Bézier surface
+</p><p>
+</p><center>
+<img src="./Bézier Surfaces  de Casteljau's Algorithm_files/be-surf-eqn-1.jpg" border="1">
+</center>
+<p>
+can be rewritten as the following
+</p><p>
+</p><center>
+<img src="./Bézier Surfaces  de Casteljau's Algorithm_files/be-surf-eqn-2.jpg" border="1">
+</center>
+<p>
+For <i>i</i> = 0, 1, ..., <i>m</i> define
+<b>q</b><sub><i>i</i></sub>(<i>v</i>)  as follows:
+</p><p>
+</p><center>
+<img src="./Bézier Surfaces  de Casteljau's Algorithm_files/be-surf-iso-curve-v-1.jpg" border="1">
+</center>
+<p>
+For a fixed <i>v</i>, we have <i>m</i>+1 points
+<b>q</b><sub>0</sub>(<i>v</i>), <b>q</b><sub>1</sub>(<i>v</i>), ...,
+<b>q</b><sub><i>m</i></sub>(<i>v</i>).
+Each <b>q</b><sub><i>i</i></sub>(<i>v</i>)
+is a point on the Bézier curve defined by control points
+<b>p</b><sub><i>i</i>0</sub>, <b>p</b><sub><i>i</i>1</sub>, ...,
+<b>p</b><sub><i>in</i></sub>.   Plugging these back into the surface
+equation yields
+</p><p>
+</p><center>
+<img src="./Bézier Surfaces  de Casteljau's Algorithm_files/be-surf-iso-curve-u-1.jpg" border="1">
+</center>
+<p>
+This means <b>p</b>(<i>u</i>,<i>v</i>) is a point of the Bézier
+curve defined by <i>m</i>+1 control points <b>q</b><sub>0</sub>(<i>v</i>),
+<b>q</b><sub>1</sub>(<i>v</i>), ..., <b>q</b><sub><i>m</i></sub>(<i>v</i>).
+Thus, we have the following conclusion:
+</p><blockquote>
+<font color="#FF0000"><b>
+To find  point <b>p</b>(<i>u</i>,<i>v</i>) on a Bézier surface, we
+can find <i>m</i>+1 points <b>q</b><sub>0</sub>(<i>v</i>),
+<b>q</b><sub>1</sub>(<i>v</i>), ..., <b>q</b><sub><i>m</i></sub>(<i>v</i>)
+and then from these points find <b>p</b>(<i>u</i>,<i>v</i>).
+</b></font>
+</blockquote>
+<p>
+This conclusion gives us a simple way for computing <b>p</b>(<i>u</i>,<i>v</i>)
+given (<i>u</i>,<i>v</i>).  Here is why.  Since each
+<b>q</b><sub><i>i</i></sub>(<i>v</i>) is a point on the Bézier curve
+defined by the <i>i</i>-th row of control points:
+<b>p</b><sub><i>i</i>0</sub>, <b>p</b><sub><i>i</i>1</sub>, ...,
+<b>p</b><sub><i>in</i></sub>.  Therefore, for the <i>i</i>-th row and
+a given <i>v</i>, we can apply de Casteljau's algorithm for Bézier
+curve to compute <b>q</b><sub><i>i</i></sub>(<i>v</i>).  After <i>m</i>+1
+applications of de Casteljau's algorithm (<i>i.e.</i>, one for each
+row), we shall have <b>q</b><sub>0</sub>(<i>v</i>),
+<b>q</b><sub>1</sub>(<i>v</i>), ..., <b>q</b><sub><i>m</i></sub>(<i>v</i>)
+in hand.  Then, applying de Casteljau's algorithm to these <i>m</i>+1
+control points again with <i>u</i> yields the final point
+<b>p</b>(<i>u</i>,<i>v</i>) on the surface!
+</p><p>
+The following diagram illustrates this concept.  The given surface is a
+degree (2,2) Bézier surface defined by a 3x3 control net.  Suppose
+<i>u</i> = 2/3 and <i>v</i> = 1/3.  To determine <b>q</b><sub>0</sub>(1/3),
+we take the 0-th row of control points <b>p</b><sub>00</sub>,
+<b>p</b><sub>01</sub> and <b>p</b><sub>02</sub> and apply de Casteljau's
+algorithm to this Bézier curve with <i>v</i> = 1/3.  Repeat this
+for the first row and the second row with <i>v</i> = 1/3.  This yields
+three intermediate control points <b>q</b><sub>0</sub>(1/3),
+<b>q</b><sub>1</sub>(1/3) and <b>q</b><sub>2</sub>(1/3).  Finally, apply
+de Casteljau's algorithm to these three new control points with <i>u</i> = 2/3.
+The result is <b>p</b>(2/3,1/3) which is colored in yellow in the figure.
+</p><p>
+</p><center>
+<img src="./Bézier Surfaces  de Casteljau's Algorithm_files/de-casteljau-diag-1.jpg" border="1">
+</center>
+<p>
+The following is an example with the given Bézier surface displayed.
+The control points are shown in white.  This control net has four rows and
+five columns and hence is a degree (3,4) Bézier surface.  For each
+row, the intermediate polylines used for the computation of de Casteljau's
+algorithm is shown in red.  The four intermediate control points
+<b>q</b><sub>0</sub>, <b>q</b><sub>1</sub>, <b>q</b><sub>2</sub> and
+<b>q</b><sub>3</sub> are shown in the figure.  The intermediate
+polylines used for the computation of this application of de Casteljau's
+algorithm are shown in blue and the final point <b>p</b>(<i>u</i>,<i>v</i>)
+on the surface is shown as a red sphere.
+</p><p>
+</p><center>
+<img src="./Bézier Surfaces  de Casteljau's Algorithm_files/de-casteljau-1.jpg" border="1">
+</center>
+<p>
+Finally, the following summarizes this algorithm:
+</p><ul>
+     <b>Input</b>: a <i>m</i>+1 rows and <i>n</i>+1 columns of control points
+          and (<i>u</i>,<i>v</i>).  <br>
+     <b>Output</b>: point on surface <b>p</b>(<i>u</i>,<i>v</i>)
+          <br>
+     <b>Algorithm</b>:  <br>  <br>
+     <ul>
+          <b>for</b> <i>i</i> := 0 <b>to</b> <i>m</i> <b>do</b>  <br>
+          <ul>
+               <b>begin</b>  <br>
+               <ul>
+                    Apply de Casteljau's algorithm to the <i>i</i>-th row of
+                    control points with <i>v</i>;  <br>
+                    Let the point obtained be
+                    <b>q</b><sub><i>i</i></sub>(<i>v</i>); <br>
+               </ul>
+               <b>end</b>
+          </ul>
+          Apply de Casteljau's algorithm to
+          <b>q</b><sub>0</sub>(<i>v</i>), <b>q</b><sub>1</sub>(<i>v</i>),
+          ..., <b>q</b><sub><i>m</i></sub>(<i>v</i>) with <i>u</i>; <br>
+          The point obtained is <b>p</b>(<i>u</i>,<i>v</i>);
+     </ul>
+</ul>
+
+</body></html>
